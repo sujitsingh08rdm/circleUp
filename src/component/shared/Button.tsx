@@ -2,17 +2,17 @@ import type { FC } from "react";
 
 const ButtonModel = {
   primary:
-    "bg-blue-500 hover:bg-blue-300 rounded font-medium text-white px-4 py-2",
+    "bg-blue-500 inline-flex hover:bg-blue-300 rounded font-medium text-white px-4 py-2",
   secondary:
-    "bg-indigo-500 hover:bg-indigo-300 rounded font-medium text-white px-4 py-2",
+    "bg-indigo-500 inline-flex hover:bg-indigo-300 rounded font-medium text-white px-4 py-2",
   danger:
-    "bg-rose-500 hover:bg-rose-300 rounded font-medium text-white px-4 py-2",
+    "bg-rose-500 inline-flex hover:bg-rose-300 rounded font-medium text-white px-4 py-2",
   warning:
-    "bg-amber-500 hover:bg-amber-300 rounded font-medium text-white px-4 py-2",
-  dark: "bg-slate-500 hover:bg-slate-300 rounded font-medium text-white px-4 py-2",
+    "bg-amber-500 inline-flex hover:bg-amber-300 rounded font-medium text-white px-4 py-2",
+  dark: "bg-slate-500 inline-flex hover:bg-slate-300 rounded font-medium text-white px-4 py-2",
   success:
-    "bg-green-500 hover:bg-green-300 rounded font-medium text-white px-4 py-2",
-  info: "bg-cyan-500 hover:bg-cyan-300 rounded font-medium text-white px-4 py-2",
+    "bg-green-500 inline-flex hover:bg-green-300 rounded font-medium text-white px-4 py-2",
+  info: "bg-cyan-500 inline-flex hover:bg-cyan-300 rounded font-medium text-white px-4 py-2",
 };
 
 interface ButtonInterface {
@@ -27,6 +27,7 @@ interface ButtonInterface {
     | "info";
   onClick?: () => void;
   icon?: string;
+  key?: string | number;
 }
 
 const Button: FC<ButtonInterface> = ({
@@ -34,9 +35,10 @@ const Button: FC<ButtonInterface> = ({
   type = "primary",
   onClick,
   icon,
+  key = 0,
 }) => {
   return (
-    <button className={ButtonModel[type]} onClick={onClick}>
+    <button key={key} className={ButtonModel[type]} onClick={onClick}>
       {icon && <i className={`ri-${icon} mr-1`}></i>} {children}
     </button>
   );
