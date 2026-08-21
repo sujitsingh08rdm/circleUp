@@ -2,6 +2,7 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import Avatar from "../shared/Avatar";
 import Card from "../shared/Card";
 import { useState } from "react";
+import Dashboard from "./Dashboard";
 
 const Layout = () => {
   const { pathname } = useLocation();
@@ -107,6 +108,7 @@ const Layout = () => {
             </div>
           }
         >
+          {pathname === "/app" ? <Dashboard /> : <Outlet />}
           <Outlet />
         </Card>
       </section>

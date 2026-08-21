@@ -7,7 +7,7 @@ const Posts = () => {
     <div className="space-y-8">
       {Array(20)
         .fill(0)
-        .map((item, index) => (
+        .map((_, index) => (
           <Card
             key={index}
             // divider

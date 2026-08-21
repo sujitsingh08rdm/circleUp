@@ -16,7 +16,7 @@ const Input: FC<InputInterface> = ({
   return (
     <input
       key={key}
-      className="border border-gray-300 rounded px-3 py-2 w-full"
+      className="border border-gray-400 rounded px-3 py-2 w-full"
       placeholder={placeholder}
       name={name}
       type={type}
