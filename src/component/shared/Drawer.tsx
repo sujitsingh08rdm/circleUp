@@ -5,6 +5,7 @@ interface DrawerInterface {
   title?: string;
   open?: boolean;
   close?: () => void;
+  key?: string | number;
 }
 
 const Drawer: FC<DrawerInterface> = ({
@@ -12,9 +13,11 @@ const Drawer: FC<DrawerInterface> = ({
   title,
   open = true,
   close,
+  key = 0,
 }) => {
   return (
     <div
+      key={key}
       style={{ right: open ? 0 : "-50%", transition: "0.5s" }}
       className="shadow-2xl w-6/12 top-0 fixed h-full overflow-auto p-8 z-10000 space-y-4"
     >

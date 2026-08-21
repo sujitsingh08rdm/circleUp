@@ -111,7 +111,7 @@ const Layout = () => {
         </Card>
       </section>
       <aside
-        className="p-8 h-full bg-white overflow-auto fixed right-0 top-0"
+        className="space-y-4 p-8 h-full bg-white overflow-auto fixed right-0 top-0"
         style={{ width: rightAsideSize, transition: "0.3s" }}
       >
         <div className="h-80 overflow-auto">
