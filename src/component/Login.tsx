@@ -9,7 +9,7 @@ const Login = () => {
       <div className="w-6/12 animate__animated animate__fadeIn">
         <Card noPadding>
           <div className="grid grid-cols-2">
-            <div className="bg-indigo-100 p-8 space-y-6">
+            <div className="bg-linear-to-br from-violet-100 via-blue-100 to-indigo-100 p-8 space-y-6">
               <div className="space-y-1">
                 <h1 className="text-3xl font-bold text-slate-900">Login</h1>
                 <p className="text-slate-700 text-xs font-normal">
@@ -37,9 +37,9 @@ const Login = () => {
                 </Link>
               </div>
             </div>
-            <div className="h-[500px] bg-linear-to-br from-indigo-400 via-blue-200 to-violet-600  rounded-r-lg flex items-center overflow-hidden">
+            <div className="h-[400px] bg-linear-to-br from-indigo-400 via-blue-200 to-violet-600  rounded-r-lg flex items-center overflow-hidden">
               <img
-                src="/images/auth-ai.svg"
+                src="/images/auth.svg"
                 alt="auth"
                 className="w-full animate__animated animate__slideInUp"
               />

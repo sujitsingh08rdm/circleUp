@@ -109,7 +109,6 @@ const Layout = () => {
           }
         >
           {pathname === "/app" ? <Dashboard /> : <Outlet />}
-          <Outlet />
         </Card>
       </section>
       <aside
@@ -143,7 +142,7 @@ const Layout = () => {
           <div className="space-y-4">
             {Array(20)
               .fill(0)
-              .map((item, index) => (
+              .map((_, index) => (
                 <div
                   key={index}
                   className="bg-gray-50 p-2 items-center rounded flex justify-between"

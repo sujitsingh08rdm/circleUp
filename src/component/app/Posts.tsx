@@ -50,7 +50,7 @@ const Posts = () => {
                 <IconButton icon="chat-1-line" type="success">
                   5K
                 </IconButton>
-              </div>{" "}
+              </div>
             </div>
           </Card>
         ))}
