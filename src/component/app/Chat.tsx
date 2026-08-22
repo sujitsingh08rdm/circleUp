@@ -20,7 +20,7 @@ const Chat = () => {
                     tenetur a, dolores facilis minus, ipsum est voluptates
                     officia deleniti magni dicta at?
                   </label>
-                  <i className="ri-arrow-left-s-fill text-rose-50 text-4xl absolute -top-1 -left-5  "></i>
+                  <i className="ri-arrow-left-s-fill text-rose-50 text-4xl absolute -top-1 -left-5"></i>
                 </div>
               </div>
               <div className="flex gap-4 items-start">

@@ -2,6 +2,7 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import Avatar from "../shared/Avatar";
 import Card from "../shared/Card";
 import { useState } from "react";
+import Dashboard from "./Dashboard";
 
 const Layout = () => {
   const { pathname } = useLocation();
@@ -107,11 +108,11 @@ const Layout = () => {
             </div>
           }
         >
-          <Outlet />
+          {pathname === "/app" ? <Dashboard /> : <Outlet />}
         </Card>
       </section>
       <aside
-        className="p-8 h-full bg-white overflow-auto fixed right-0 top-0"
+        className="space-y-4 p-8 h-full bg-white overflow-auto fixed right-0 top-0"
         style={{ width: rightAsideSize, transition: "0.3s" }}
       >
         <div className="h-80 overflow-auto">
@@ -141,7 +142,7 @@ const Layout = () => {
           <div className="space-y-4">
             {Array(20)
               .fill(0)
-              .map((item, index) => (
+              .map((_, index) => (
                 <div
                   key={index}
                   className="bg-gray-50 p-2 items-center rounded flex justify-between"

@@ -7,6 +7,7 @@ interface AvatarInterface {
   titleColor?: string;
   subtitleColor?: string;
   size?: "lg" | "md";
+  key?: string | number;
 }
 
 const Avatar: FC<AvatarInterface> = ({
@@ -16,9 +17,10 @@ const Avatar: FC<AvatarInterface> = ({
   titleColor = "white",
   subtitleColor = "white",
   size = "lg",
+  key = 0,
 }) => {
   return (
-    <div className="flex gap-3 items-center">
+    <div key={key} className="flex gap-3 items-center">
       {image && (
         <img
           src={image}
