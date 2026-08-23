@@ -2,8 +2,29 @@ import { Link } from "react-router-dom";
 import Button from "./shared/Button";
 import Card from "./shared/Card";
 import Input from "./shared/Input";
+import Form, { type FormDataType } from "./shared/Form";
+import HttpInterceptor from "./lib/HttpsInterceptor";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const Login = () => {
+  const login = async (values: FormDataType) => {
+    try {
+      const { data } = await HttpInterceptor.post("/auth/login", values);
+      console.log(data);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        return toast.error(error.response?.data.message);
+      }
+
+      if (error instanceof Error) {
+        return toast.error(error.message);
+      }
+
+      toast.error("Something went wrong");
+    }
+  };
+
   return (
     <div className="bg-linear-to-br from-indigo-100 via-blue-100 to-violet-100 flex items-center justify-center h-screen">
       <div className="w-6/12 animate__animated animate__fadeIn">
@@ -16,7 +37,7 @@ const Login = () => {
                   Enter credentials..
                 </p>
               </div>
-              <form className="space-y-4">
+              <Form className="space-y-4" onValue={login}>
                 <Input name="email" type="email" placeholder="Email.." />
                 <Input
                   name="password"
@@ -26,7 +47,7 @@ const Login = () => {
                 <Button icon="login-box-fill" type="secondary">
                   Login
                 </Button>
-              </form>
+              </Form>
               <div className="flex gap-2">
                 <p>Dont have an acount?</p>
                 <Link
