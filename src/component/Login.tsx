@@ -1,9 +1,23 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "./shared/Button";
 import Card from "./shared/Card";
 import Input from "./shared/Input";
+import Form, { type FormDataType } from "./shared/Form";
+import HttpInterceptor from "../lib/HttpsInterceptor";
+import CatchError from "../lib/CatchError";
 
 const Login = () => {
+  const navigate = useNavigate();
+
+  const login = async (values: FormDataType) => {
+    try {
+      await HttpInterceptor.post("/auth/login", values);
+      navigate("/app");
+    } catch (error: unknown) {
+      CatchError(error);
+    }
+  };
+
   return (
     <div className="bg-linear-to-br from-indigo-100 via-blue-100 to-violet-100 flex items-center justify-center h-screen">
       <div className="w-6/12 animate__animated animate__fadeIn">
@@ -16,7 +30,7 @@ const Login = () => {
                   Enter credentials..
                 </p>
               </div>
-              <form className="space-y-4">
+              <Form className="space-y-4" onValue={login}>
                 <Input name="email" type="email" placeholder="Email.." />
                 <Input
                   name="password"
@@ -26,7 +40,7 @@ const Login = () => {
                 <Button icon="login-box-fill" type="secondary">
                   Login
                 </Button>
-              </form>
+              </Form>
               <div className="flex gap-2">
                 <p>Dont have an acount?</p>
                 <Link

@@ -1,12 +1,13 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
 import Avatar from "../shared/Avatar";
 import Card from "../shared/Card";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Dashboard from "./Dashboard";
+import Context from "../../Context";
 
 const Layout = () => {
   const { pathname } = useLocation();
-
+  const { session } = useContext(Context);
   const [leftAsideSize, setLeftAsideSize] = useState(350);
   const collpaseSize = 140;
   const rightAsideSize = 400;
@@ -50,11 +51,13 @@ const Layout = () => {
             <i className="ri-user-fill text-xl animate__animated animate__fadeIn text-gray-300 hover:text-gray-100 hover:font-medium"></i>
           ) : (
             <div className="animate__animated animate__fadeIn">
-              <Avatar
-                title="Arushi"
-                subtitle="MNC Engineer"
-                image="/images/avtar.jpg"
-              />
+              {session && (
+                <Avatar
+                  title={session.fullname}
+                  subtitle={session.email}
+                  image="/images/avtar.jpg"
+                />
+              )}
             </div>
           )}
 
