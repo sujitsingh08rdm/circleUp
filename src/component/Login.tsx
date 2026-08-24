@@ -1,27 +1,20 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "./shared/Button";
 import Card from "./shared/Card";
 import Input from "./shared/Input";
 import Form, { type FormDataType } from "./shared/Form";
-import HttpInterceptor from "./lib/HttpsInterceptor";
-import { toast } from "react-toastify";
-import axios from "axios";
+import HttpInterceptor from "../lib/HttpsInterceptor";
+import CatchError from "../lib/CatchError";
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const login = async (values: FormDataType) => {
     try {
-      const { data } = await HttpInterceptor.post("/auth/login", values);
-      console.log(data);
+      await HttpInterceptor.post("/auth/login", values);
+      navigate("/app");
     } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        return toast.error(error.response?.data.message);
-      }
-
-      if (error instanceof Error) {
-        return toast.error(error.message);
-      }
-
-      toast.error("Something went wrong");
+      CatchError(error);
     }
   };
 

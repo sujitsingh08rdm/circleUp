@@ -15,6 +15,7 @@ import NotFound from "./component/NotFound";
 import Context from "./Context";
 import { useState } from "react";
 import { ToastContainer } from "react-toastify";
+import Guard from "./Guard";
 
 const App = () => {
   const [session, setSession] = useState(null);
@@ -26,13 +27,15 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/app" element={<Layout />}>
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="my-posts" element={<Posts />} />
-            <Route path="friends" element={<Friends />} />
-            <Route path="video-chat" element={<Video />} />
-            <Route path="audio-chat" element={<Audio />} />
-            <Route path="chat" element={<Chat />} />
+          <Route element={<Guard />}>
+            <Route path="/app" element={<Layout />}>
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="my-posts" element={<Posts />} />
+              <Route path="friends" element={<Friends />} />
+              <Route path="video-chat" element={<Video />} />
+              <Route path="audio-chat" element={<Audio />} />
+              <Route path="chat" element={<Chat />} />
+            </Route>
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

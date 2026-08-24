@@ -3,7 +3,7 @@ import Button from "./shared/Button";
 import Card from "./shared/Card";
 import Input from "./shared/Input";
 import Form, { type FormDataType } from "./shared/Form";
-import HttpInterceptor from "./lib/HttpsInterceptor";
+import HttpInterceptor from "../lib/HttpsInterceptor";
 import axios from "axios";
 import { toast } from "react-toastify";
 
