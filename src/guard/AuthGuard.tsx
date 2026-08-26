@@ -1,9 +1,9 @@
 import { useContext, useEffect } from "react";
-import HttpInterceptor from "./lib/HttpsInterceptor";
-import Context from "./Context";
+import HttpInterceptor from "../lib/HttpsInterceptor";
+import Context from "../Context";
 import { Navigate, Outlet } from "react-router-dom";
 
-const Guard = () => {
+const AuthGuard = () => {
   const { session, setSession } = useContext(Context);
 
   const getSession = async () => {
@@ -31,4 +31,4 @@ const Guard = () => {
   return <Outlet />;
 };
 
-export default Guard;
+export default AuthGuard;
