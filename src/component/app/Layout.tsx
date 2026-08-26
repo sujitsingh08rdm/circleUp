@@ -1,16 +1,28 @@
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import Avatar from "../shared/Avatar";
 import Card from "../shared/Card";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Dashboard from "./Dashboard";
 import Context from "../../Context";
+import HttpInterceptor from "../../lib/HttpsInterceptor";
+import { v4 as uuid } from "uuid";
+import useSWR, { mutate } from "swr";
+import Fetcher from "../../lib/Fetcher";
+import CatchError from "../../lib/CatchError";
+
+const eightMinInMs = 8 * 60 * 1000;
 
 const Layout = () => {
   const { pathname } = useLocation();
-  const { session } = useContext(Context);
+  const { session, setSession } = useContext(Context);
+  const navigate = useNavigate();
   const [leftAsideSize, setLeftAsideSize] = useState(350);
   const collpaseSize = 140;
   const rightAsideSize = 400;
+  const { error } = useSWR("/auth/refresh-token", Fetcher, {
+    refreshInterval: eightMinInMs,
+    shouldRetryOnError: false,
+  });
 
   const sectionDimention = {
     width: `calc(100% - ${leftAsideSize + rightAsideSize}px)`,
@@ -34,11 +46,65 @@ const Layout = () => {
     { id: "03", href: "friends", label: "friends", icon: "ri-group-3-fill" },
   ];
 
+  const logout = async () => {
+    try {
+      await HttpInterceptor.post("/auth/logout");
+      navigate("/login");
+    } catch (error) {
+      CatchError(error);
+    }
+  };
+
   const getPathname = (path: string) => {
     const firstPath = path.split("/").pop();
     const finalPath = firstPath!.split("-").join(" ");
     return finalPath;
   };
+
+  const uploadImage = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.click();
+    input.onchange = async () => {
+      if (!input.files) {
+        return;
+      }
+
+      const file = input.files[0];
+      const path = `profile-picture/${uuid()}.png`;
+      const payload = {
+        path,
+        type: file.type,
+      };
+
+      try {
+        const options = {
+          headers: {
+            "Content-Type": file.type,
+          },
+        };
+        const { data } = await HttpInterceptor.post("/storage/upload", payload);
+        await HttpInterceptor.put(data.url, file, options);
+        const { data: user } = await HttpInterceptor.put(
+          "/auth/profile-picture",
+          {
+            path,
+          },
+        );
+        setSession({ ...session, image: user.image });
+        mutate("/auth/refresh-token");
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  };
+
+  useEffect(() => {
+    if (error) {
+      logout();
+    }
+  }, [error]);
 
   return (
     <div className="min-h-screen">
@@ -55,7 +121,8 @@ const Layout = () => {
                 <Avatar
                   title={session.fullname}
                   subtitle={session.email}
-                  image="/images/avtar.jpg"
+                  image={session.image || "/images/avtar.jpg"}
+                  onClick={uploadImage}
                 />
               )}
             </div>
@@ -81,6 +148,7 @@ const Layout = () => {
             <button
               title="logout"
               className="flex text-gray-300 gap-3 items-center py-3 hover:text-gray-100 hover:font-medium"
+              onClick={logout}
             >
               <i className="ri-logout-box-r-line text-xl"></i>
               <label
