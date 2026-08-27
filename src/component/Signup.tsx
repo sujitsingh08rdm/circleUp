@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "./shared/Button";
 import Card from "./shared/Card";
 import Input from "./shared/Input";
@@ -8,10 +8,11 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const Signup = () => {
+  const navigate = useNavigate();
   const signUp = async (values: FormDataType) => {
     try {
-      const { data } = await HttpInterceptor.post("/auth/signup", values);
-      console.log(data);
+      await HttpInterceptor.post("/auth/signup", values);
+      navigate("/login");
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         return toast.error(error.response?.data.message);
