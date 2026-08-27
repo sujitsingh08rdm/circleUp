@@ -2,6 +2,7 @@ import { useContext, useEffect } from "react";
 import HttpInterceptor from "../lib/HttpsInterceptor";
 import Context from "../Context";
 import { Navigate, Outlet } from "react-router-dom";
+import { Skeleton } from "antd";
 
 const RedirectGuard = () => {
   const { session, setSession } = useContext(Context);
@@ -21,7 +22,11 @@ const RedirectGuard = () => {
   }, []);
 
   if (session === null) {
-    return null;
+    return (
+      <div className="w-full h-screen bg-linear-to-br from-indigo-100 via-blue-100 to-violet-100 p-5">
+        <Skeleton active />
+      </div>
+    );
   }
 
   if (session === false) {

@@ -9,6 +9,8 @@ import { v4 as uuid } from "uuid";
 import useSWR, { mutate } from "swr";
 import Fetcher from "../../lib/Fetcher";
 import CatchError from "../../lib/CatchError";
+import FriendSuggestion from "./FriendSuggestion";
+import FriendRequest from "./FriendRequest";
 
 const eightMinInMs = 8 * 60 * 1000;
 
@@ -76,6 +78,7 @@ const Layout = () => {
       const payload = {
         path,
         type: file.type,
+        status: "public-read",
       };
 
       try {
@@ -186,29 +189,9 @@ const Layout = () => {
         className="space-y-4 p-8 h-full bg-white overflow-auto fixed right-0 top-0"
         style={{ width: rightAsideSize, transition: "0.3s" }}
       >
-        <div className="h-80 overflow-auto">
-          <Card divider title="suggestion">
-            <div className="space-y-4">
-              {Array(10)
-                .fill(0)
-                .map((_, index) => (
-                  <div className="flex gap-4" key={index}>
-                    <img
-                      src="/images/default.png"
-                      className="w-12 h-12 rounded-full object-cover"
-                    />
-                    <div>
-                      <h2 className="-mt-0.5 font-medium">Priyanshi</h2>
-                      <button className="px-2 py-1 bg-indigo-400 text-white text-xs flex items-center hover:bg-indigo-600 hover:text-gray-200 rounded-md">
-                        <i className="ri-user-add-fill mr-1"></i>
-                        Add Friend
-                      </button>
-                    </div>
-                  </div>
-                ))}
-            </div>
-          </Card>
-        </div>
+        <FriendSuggestion />
+        <FriendRequest />
+
         <Card title="My Friends" divider>
           <div className="space-y-4">
             {Array(20)
