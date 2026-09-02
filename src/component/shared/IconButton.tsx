@@ -2,7 +2,7 @@ import type { FC } from "react";
 
 const IconButtonModel = {
   primary:
-    "bg-blue-200 text-blue-800 hover:text-blue-900 inline-flex hover:bg-blue-400 rounded font-medium px-2 py-1",
+    "bg-blue-100 text-blue-800 hover:text-blue-900 inline-flex hover:bg-blue-400 rounded font-medium px-2 py-1",
   secondary:
     "bg-indigo-200 text-indigo-800 hover:text-indigo-900 inline-flex hover:bg-indigo-400 rounded font-medium px-2 py-1",
   danger:
