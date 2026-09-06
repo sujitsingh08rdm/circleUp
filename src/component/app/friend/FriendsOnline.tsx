@@ -1,17 +1,23 @@
 import { useContext, useEffect, useState } from "react";
 import Card from "../../shared/Card";
 import socket from "../../../lib/socket";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Context from "../../../Context";
 import Avatar from "../../shared/Avatar";
 
 const FriendsOnline = () => {
   const [onlineUsers, setOnlineUsers] = useState([]);
-  const { session } = useContext(Context);
+  const { session, setLiveActiveSession } = useContext(Context);
+  const navigate = useNavigate();
 
   const onlineHandler = (users: any) => {
     // console.log(users);
     setOnlineUsers(users);
+  };
+
+  const generateActiveSession = (url: string, user: any) => {
+    setLiveActiveSession(user);
+    navigate(url);
   };
 
   useEffect(() => {
@@ -36,7 +42,7 @@ const FriendsOnline = () => {
               >
                 <Avatar
                   size="md"
-                  image="/images/default.png"
+                  image={item.image || "/images/default.png"}
                   title={item.fullname}
                   titleColor="black"
                   subtitle={
@@ -49,30 +55,35 @@ const FriendsOnline = () => {
                   }
                 />
                 <div className="space-x-2 items-center">
-                  <Link to={`/app/chat/${item.id}`} target="_blank">
-                    <button
-                      className="text-blue-400 hover:text-blue-600"
-                      title="Chat"
-                    >
-                      <i className="ri-chat-1-line"></i>
-                    </button>
-                  </Link>
-                  <Link to="/app/audio-chat">
-                    <button
-                      className="text-amber-400 hover:text-amber-600"
-                      title="Call"
-                    >
-                      <i className="ri-phone-line"></i>
-                    </button>
-                  </Link>
-                  <Link to="/app/video-chat">
-                    <button
-                      className="text-green-400 hover:text-green-600"
-                      title="Chat"
-                    >
-                      <i className="ri-video-chat-line"></i>
-                    </button>
-                  </Link>
+                  <button
+                    className="text-blue-400 hover:text-blue-600 hover:cursor-pointer"
+                    title="Chat"
+                    onClick={() =>
+                      generateActiveSession(`/app/chat/${item.id}`, item)
+                    }
+                  >
+                    <i className="ri-chat-1-line"></i>
+                  </button>
+
+                  <button
+                    className="text-amber-400 hover:text-amber-600 hover:cursor-pointer"
+                    title="Call"
+                    onClick={() =>
+                      generateActiveSession(`/app/audio-chat/${item.id}`, item)
+                    }
+                  >
+                    <i className="ri-phone-line"></i>
+                  </button>
+
+                  <button
+                    className="text-green-400 hover:text-green-600 hover:cursor-pointer"
+                    title="Chat"
+                    onClick={() =>
+                      generateActiveSession(`/app/video-chat/${item.id}`, item)
+                    }
+                  >
+                    <i className="ri-video-chat-line"></i>
+                  </button>
                 </div>
               </div>
               //   <div key={index} className="flex">
