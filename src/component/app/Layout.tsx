@@ -1,4 +1,10 @@
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import {
+  Link,
+  Outlet,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import Avatar from "../shared/Avatar";
 import Card from "../shared/Card";
 import { useContext, useEffect, useState } from "react";
@@ -16,15 +22,26 @@ import { useMediaQuery } from "react-responsive";
 import Logo from "../shared/Logo";
 import IconButton from "../shared/IconButton";
 import FriendsOnline from "./friend/FriendsOnline";
+import socket from "../../lib/socket";
+import type { onOfferInterface } from "./Video";
 
 const eightMinInMs = 8 * 60 * 1000;
 
 const Layout = () => {
   const { pathname } = useLocation();
-  const { session, setSession } = useContext(Context);
+  const {
+    session,
+    setSession,
+    liveActiveSession,
+    setLiveActiveSession,
+    setSdp,
+  } = useContext(Context);
   const navigate = useNavigate();
   const [leftAsideSize, setLeftAsideSize] = useState(0);
   const [collapseSize, setCollapseSize] = useState(0);
+
+  const params = useParams();
+  const paramsArray = Object.keys(params);
   const rightAsideSize = 400;
   const friendsUIBlacklist = [
     "/app/friends",
@@ -70,6 +87,12 @@ const Layout = () => {
     } catch (error) {
       CatchError(error);
     }
+  };
+
+  const onOffer = (payload: onOfferInterface) => {
+    setSdp(payload);
+    setLiveActiveSession(payload.from);
+    navigate(`/app/video-chat/${payload.from.socketId}`);
   };
 
   const getPathname = (path: string) => {
@@ -118,6 +141,24 @@ const Layout = () => {
     };
   };
 
+  const ActiveSessionUi = () => {
+    if (!liveActiveSession) {
+      navigate("/app");
+      return;
+    }
+    return (
+      <div className="flex gap-2">
+        <img
+          src={liveActiveSession.image}
+          className="w-12 h-12 rounded-full object-cover"
+        />
+        <div className="flex flex-col items-center">
+          <h2 className="font-medium">{liveActiveSession.fullname}</h2>
+          <label className="text-xs font-normal text-green-400">Online</label>
+        </div>
+      </div>
+    );
+  };
   // useEffect(() => {
   //   if (error) {
   //     logout();
@@ -128,6 +169,14 @@ const Layout = () => {
     setLeftAsideSize(isMobile ? 0 : 350);
     setCollapseSize(isMobile ? 0 : 140);
   }, [isMobile]);
+
+  useEffect(() => {
+    socket.on("offer", onOffer);
+
+    return () => {
+      socket.off("offer", onOffer);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen">
@@ -203,7 +252,7 @@ const Layout = () => {
         style={sectionDimention}
       >
         {/* {!isBlacklisted && <FriendRequest />} */}
-        <div className="flex-1">
+        <div className="flex-1 lg:order-1 order-2">
           <Card
             divider
             title={
@@ -218,7 +267,13 @@ const Layout = () => {
                 >
                   <i className="ri-arrow-left-long-line"></i>
                 </button>
-                <h2>{getPathname(pathname)}</h2>
+                <h2>
+                  {paramsArray.length === 0 ? (
+                    getPathname(pathname)
+                  ) : (
+                    <ActiveSessionUi />
+                  )}
+                </h2>
               </div>
             }
           >
@@ -226,7 +281,7 @@ const Layout = () => {
           </Card>
         </div>
 
-        <aside className="bg-white lg:w-90 lg:pr-6">
+        <aside className="bg-white lg:w-90 lg:pr-6 lg:order-2 order-1">
           <FriendsOnline />
         </aside>
 

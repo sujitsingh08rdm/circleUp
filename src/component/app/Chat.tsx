@@ -149,7 +149,6 @@ const Chat = () => {
         ...prev,
         { ...attachmentPayload, ...localMetadata },
       ]);
-
       socket.emit("attachment", { ...attachmentPayload, ...remoteMetadata });
     } catch (error) {
       CatchError(error.message);
