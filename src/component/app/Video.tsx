@@ -128,6 +128,7 @@ const Video = () => {
           if (videoTrack && senderTrack) {
             await senderTrack.replaceTrack(videoTrack);
           }
+
           localVideo.srcObject = videoCamStream;
           localStreamRef.current = videoCamStream;
           setIsVideoSharing(true);
@@ -558,7 +559,7 @@ const Video = () => {
           playsInline
         ></video>
         <button className="absolute bottom-5 left-5 text-gray-50 bg-gray-800 opacity-80 rounded text-sm py-1 px-2 hover:text-gray-100">
-          Rahul Prasad
+          {liveActiveSession && liveActiveSession.fullname}
         </button>
         <button
           onClick={() => toggleFullScreen("remote")}
