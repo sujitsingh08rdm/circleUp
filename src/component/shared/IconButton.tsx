@@ -2,17 +2,17 @@ import type { FC } from "react";
 
 const IconButtonModel = {
   primary:
-    "bg-blue-100 text-blue-800 hover:text-blue-900 inline-flex hover:bg-blue-400 rounded font-medium px-2 py-1",
+    "bg-blue-100 text-blue-800 hover:text-blue-900 inline-flex items-center justify-center gap-1 hover:bg-blue-400 rounded font-medium px-2 py-1",
   secondary:
-    "bg-indigo-200 text-indigo-800 hover:text-indigo-900 inline-flex hover:bg-indigo-400 rounded font-medium px-2 py-1",
+    "bg-indigo-200 text-indigo-800 hover:text-indigo-900 inline-flex items-center justify-center gap-1 hover:bg-indigo-400 rounded font-medium px-2 py-1",
   danger:
-    "bg-rose-200 text-rose-800 hover:text-rose-900 inline-flex hover:bg-rose-400 rounded font-medium px-2 py-1",
+    "bg-rose-200 text-rose-800 hover:text-rose-900 inline-flex hover:bg-rose-400 items-center justify-center gap-1 rounded font-medium px-2 py-1",
   warning:
-    "bg-amber-200 text-amber-800 hover:text-amber-900 inline-flex hover:bg-amber-400 rounded font-medium px-2 py-1",
+    "bg-amber-200 text-amber-800 hover:text-amber-900 inline-flex hover:bg-amber-400 items-center justify-center gap-1 rounded font-medium px-2 py-1",
   dark: "bg-slate-200 inline-flex hover:bg-slate-400 rounded font-medium px-2 py-1",
   success:
-    "bg-green-200 text-green-800 hover:text-green-900 inline-flex hover:bg-green-400 rounded font-medium px-2 py-1",
-  info: "bg-cyan-200 inline-flex hover:bg-cyan-400 rounded font-medium px-2 py-1",
+    "bg-green-200 text-green-800 hover:text-green-900 inline-flex hover:bg-green-400 items-center justify-center gap-1 rounded font-medium px-2 py-1",
+  info: "bg-cyan-200 gap-1 inline-flex items-center justify-center hover:bg-cyan-400 rounded font-medium px-2 py-1",
 };
 
 interface IconButtonInterface {
@@ -38,7 +38,9 @@ const IconButton: FC<IconButtonInterface> = ({
   return (
     <button className={IconButtonModel[type]} onClick={onClick}>
       {icon && <i className={`ri-${icon}`}></i>}
-      {children && <span className="ml-1">{children}</span>}
+      {children && (
+        <span className="ml-1 items-center justify-center">{children}</span>
+      )}
     </button>
   );
 };

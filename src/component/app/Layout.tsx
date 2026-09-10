@@ -51,7 +51,7 @@ const Layout = () => {
   ];
   const isMobile = useMediaQuery({ query: "(max-width: 1224px)" });
 
-  // const isBlacklisted = friendsUIBlacklist.some((path) => pathname === path);
+  const isBlacklisted = friendsUIBlacklist.some((path) => pathname === path);
 
   // const { error } = useSWR("/auth/refresh-token", Fetcher, {
   //   refreshInterval: eightMinInMs,
@@ -281,7 +281,9 @@ const Layout = () => {
           </Card>
         </div>
 
-        <aside className="bg-white lg:w-90 lg:pr-6 lg:order-2 order-1">
+        <aside className="bg-white lg:w-90 lg:pr-6 lg:order-2 order-1 flex flex-col gap-8">
+          <FriendRequest />
+          <FriendSuggestion />
           <FriendsOnline />
         </aside>
 
