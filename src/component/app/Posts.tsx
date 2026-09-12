@@ -62,7 +62,6 @@ const Posts = () => {
         };
 
         const { data } = await HttpInterceptor.post("/storage/upload", payload);
-
         await HttpInterceptor.put(data.url, fileData.file, options);
       }
 

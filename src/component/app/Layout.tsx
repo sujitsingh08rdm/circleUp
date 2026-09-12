@@ -92,7 +92,16 @@ const Layout = () => {
   const onOffer = (payload: onOfferInterface) => {
     setSdp(payload);
     setLiveActiveSession(payload.from);
-    navigate(`/app/video-chat/${payload.from.socketId}`);
+    if (payload.type === "video") {
+      navigate(`/app/video-chat/${payload.from.socketId}`);
+    }
+    if (payload.type === "audio") {
+      navigate(`/app/audio-chat/${payload.from.socketId}`);
+    }
+
+    if (payload.type === "chat") {
+      navigate(`/app/chat/${payload.from.socketId}`);
+    }
   };
 
   const getPathname = (path: string) => {
