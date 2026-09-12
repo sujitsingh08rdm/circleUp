@@ -1,7 +1,6 @@
-import React, { type FC } from "react";
+import { type FC } from "react";
 import Card from "../../shared/Card";
-import { Link } from "react-router-dom";
-import IconButton from "../../shared/IconButton";
+
 import Fetcher from "../../../lib/Fetcher";
 import useSWR, { mutate } from "swr";
 import { Empty, Skeleton } from "antd";

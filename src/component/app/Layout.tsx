@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import Avatar from "../shared/Avatar";
 import Card from "../shared/Card";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Dashboard from "./Dashboard";
 import Context from "../../Context";
 import HttpInterceptor from "../../lib/HttpsInterceptor";
@@ -17,13 +17,13 @@ import Fetcher from "../../lib/Fetcher";
 import CatchError from "../../lib/CatchError";
 import FriendSuggestion from "./friend/FriendSuggestion";
 import FriendRequest from "./friend/FriendRequest";
-import FriendList from "./friend/FriendList";
 import { useMediaQuery } from "react-responsive";
 import Logo from "../shared/Logo";
 import IconButton from "../shared/IconButton";
 import FriendsOnline from "./friend/FriendsOnline";
 import socket from "../../lib/socket";
 import type { onOfferInterface } from "./Video";
+import { notification } from "antd";
 
 const eightMinInMs = 8 * 60 * 1000;
 
@@ -39,24 +39,45 @@ const Layout = () => {
   const navigate = useNavigate();
   const [leftAsideSize, setLeftAsideSize] = useState(0);
   const [collapseSize, setCollapseSize] = useState(0);
-
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const params = useParams();
   const paramsArray = Object.keys(params);
-  const rightAsideSize = 400;
-  const friendsUIBlacklist = [
-    "/app/friends",
-    "/app/chat",
-    "/app/audio-chat",
-    "/app/video-chat",
-  ];
+
+  // const friendsUIBlacklist = [
+  //   "/app/friends",
+  //   "/app/chat",
+  //   "/app/audio-chat",
+  //   "/app/video-chat",
+  // ];
   const isMobile = useMediaQuery({ query: "(max-width: 1224px)" });
+  const [notify, notifyUi] = notification.useNotification();
+  // const isBlacklisted = friendsUIBlacklist.some((path) => pathname === path);
 
-  const isBlacklisted = friendsUIBlacklist.some((path) => pathname === path);
+  const stopAudio = () => {
+    if (!audioRef.current) {
+      return;
+    }
 
-  // const { error } = useSWR("/auth/refresh-token", Fetcher, {
-  //   refreshInterval: eightMinInMs,
-  //   shouldRetryOnError: false,
-  // });
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+  };
+
+  const playAudio = (src: string, loop: boolean = false) => {
+    stopAudio();
+    if (!audioRef.current) {
+      audioRef.current = new Audio();
+    }
+    const player = audioRef.current;
+    player.src = src;
+    player.loop = loop;
+    player.load();
+    player.play();
+  };
+
+  const { error } = useSWR("/auth/refresh-token", Fetcher, {
+    refreshInterval: eightMinInMs,
+    shouldRetryOnError: false,
+  });
 
   const sectionDimention = {
     width: isMobile ? "100%" : `calc(100% - ${leftAsideSize}px)`,
@@ -98,10 +119,38 @@ const Layout = () => {
     if (payload.type === "audio") {
       navigate(`/app/audio-chat/${payload.from.socketId}`);
     }
+  };
 
-    if (payload.type === "chat") {
-      navigate(`/app/chat/${payload.from.socketId}`);
+  const startChat = (payload: any) => {
+    notify.destroy();
+    setLiveActiveSession(payload.from);
+    navigate(`/app/chat/${payload.from.id}`);
+  };
+
+  const onMessage = (payload: any) => {
+    if (location.href.includes("/app/chat")) {
+      return;
     }
+    playAudio("/sounds/chat.mp3");
+    notify.open({
+      message: (
+        <h2 className="font-medium capitalize">{payload.from.fullname}</h2>
+      ),
+      description: payload.message,
+      placement: "bottomRight",
+      duration: 30,
+      actions: [
+        <button
+          key="chat"
+          className="bg-green-400 hover:bg-green-600 text-white rounded px-6 py-2"
+          onClick={() => {
+            startChat(payload);
+          }}
+        >
+          Start Chat
+        </button>,
+      ],
+    });
   };
 
   const getPathname = (path: string) => {
@@ -145,7 +194,7 @@ const Layout = () => {
         setSession({ ...session, image: user.image });
         mutate("/auth/refresh-token");
       } catch (error) {
-        console.log(error);
+        CatchError(error);
       }
     };
   };
@@ -168,11 +217,12 @@ const Layout = () => {
       </div>
     );
   };
-  // useEffect(() => {
-  //   if (error) {
-  //     logout();
-  //   }
-  // }, [error]);
+
+  useEffect(() => {
+    if (error) {
+      logout();
+    }
+  }, [error]);
 
   useEffect(() => {
     setLeftAsideSize(isMobile ? 0 : 350);
@@ -181,15 +231,17 @@ const Layout = () => {
 
   useEffect(() => {
     socket.on("offer", onOffer);
+    socket.on("message", onMessage);
 
     return () => {
       socket.off("offer", onOffer);
+      socket.off("message", onMessage);
     };
   }, []);
 
   return (
     <div className="min-h-screen">
-      <nav className="flex lg:hidden justify-between items-center bg-linear-to-br from-[#3D4E81] via-[#5753C9] to-[#6E7FF3] sticky top-0 left-0 w-full p-4 z-[20000] py-4 px-6">
+      <nav className="flex lg:hidden justify-between items-center bg-linear-to-br from-[#3D4E81] via-[#5753C9] to-[#6E7FF3] sticky top-0 left-0 w-full p-4 z-20000 py-4 px-6">
         <Logo />
         <div className="flex gap-4">
           <IconButton onClick={logout} icon="logout-box-line" />
@@ -205,7 +257,7 @@ const Layout = () => {
         </div>
       </nav>
       <aside
-        className="lg:p-8 h-full bg-white overflow-auto fixed left-0 top-0 z-[20000]"
+        className="lg:p-8 h-full bg-white overflow-auto fixed left-0 top-0 z-20000"
         style={{ width: leftAsideSize, transition: "0.3s" }}
       >
         <div className="space-y-8 lg:rounded-2xl h-full p-8 bg-linear-to-br from-[#3D4E81] via-[#5753C9] to-[#6E7FF3]">
@@ -298,6 +350,7 @@ const Layout = () => {
 
         {/* {!isBlacklisted && <FriendSuggestion />} */}
       </section>
+      {notifyUi}
     </div>
   );
 };

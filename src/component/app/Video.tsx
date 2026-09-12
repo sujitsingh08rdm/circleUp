@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 import socket from "../../lib/socket";
 import { useNavigate, useParams } from "react-router-dom";
 import { Modal, notification } from "antd";
-import HttpInterceptor from "../../lib/HttpsInterceptor";
 
 //ice server (interective connection endpoint) specialized configuration endpoints used in WebRTC to help devices find the best path to connect to each other, especially when hidden behind firewalls or NAT (Network Address Translation) routers.
 // stun :session traversal utility for NAT(network address translation) : Discovers your device's public IP address and port so a peer knows where to send data
@@ -148,7 +147,7 @@ const Video = () => {
         setIsScreenSharing(false);
         setIsMuted(false);
       }
-    } catch (error) {
+    } catch (error: any) {
       CatchError(error.message);
     }
   };
@@ -227,7 +226,7 @@ const Video = () => {
       } else {
         document.exitFullscreen();
       }
-    } catch (error) {
+    } catch (error: any) {
       CatchError(error.message);
     }
   };
@@ -249,7 +248,6 @@ const Video = () => {
     });
     // give information about connected users information like poert public ip.
     webRtcRef.current.onicecandidate = (e) => {
-      console.log("e.candidate");
       if (e.candidate) {
         socket.emit("candidate", { candidate: e.candidate, to: id });
       }
@@ -271,17 +269,14 @@ const Video = () => {
       const videoTracks = remoteStream.getVideoTracks()[0];
       if (videoTracks) {
         videoTracks.onmute = () => {
-          console.log("video off from remote side");
           remoteVideo.style.display = "none";
         };
 
         videoTracks.onunmute = () => {
-          console.log("video on from remote side");
           remoteVideo.style.display = "block";
         };
 
         videoTracks.onended = () => {
-          console.log("video ended from remote side");
           remoteVideo.style.display = "none";
           remoteVideo.srcObject = null;
         };

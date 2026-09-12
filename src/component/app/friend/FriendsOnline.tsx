@@ -11,7 +11,6 @@ const FriendsOnline = () => {
   const navigate = useNavigate();
 
   const onlineHandler = (users: any) => {
-    // console.log(users);
     setOnlineUsers(users);
   };
 

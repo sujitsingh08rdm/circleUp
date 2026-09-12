@@ -146,7 +146,7 @@ const AudioChat = () => {
     }
   };
 
-  const acceptCall = async (payload: OnOfferInterface) => {
+  const acceptCall = async (payload: onOfferInterface) => {
     try {
       setSdp(null);
       await connection();
@@ -183,7 +183,6 @@ const AudioChat = () => {
   };
 
   const onOffer = (payload: onOfferInterface) => {
-    console.log("offer recieved");
     notify.open({
       message: (
         <h2 className="capitalize font-medium">{payload.from.fullname}</h2>
@@ -292,7 +291,8 @@ const AudioChat = () => {
   }, []);
 
   if (!liveActiveSession) {
-    return navigate("/app");
+    navigate("/app");
+    return null;
   }
 
   return (

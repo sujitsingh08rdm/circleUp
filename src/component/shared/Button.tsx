@@ -29,7 +29,8 @@ interface ButtonInterface {
     | "dark"
     | "success"
     | "info"
-    | "smSecondary";
+    | "smSecondary"
+    | "smSuccess";
   onClick?: () => void;
   icon?: string;
   key?: string | number;
