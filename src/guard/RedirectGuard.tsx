@@ -3,6 +3,7 @@ import HttpInterceptor from "../lib/HttpsInterceptor";
 import Context from "../Context";
 import { Navigate, Outlet } from "react-router-dom";
 import { Skeleton } from "antd";
+import CatchError from "../lib/CatchError";
 
 const RedirectGuard = () => {
   const { session, setSession } = useContext(Context);
@@ -13,7 +14,7 @@ const RedirectGuard = () => {
       setSession(data);
     } catch (error) {
       setSession(false);
-      console.log(error);
+      CatchError(error);
     }
   };
 

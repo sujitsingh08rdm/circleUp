@@ -6,7 +6,7 @@ import Card from "../../shared/Card";
 import Button from "../../shared/Button";
 import Fetcher from "../../../lib/Fetcher";
 import useSWR, { mutate } from "swr";
-import { Empty, message, Skeleton } from "antd";
+import { Empty, Skeleton } from "antd";
 import CatchError from "../../../lib/CatchError";
 import HttpInterceptor from "../../../lib/HttpsInterceptor";
 import { toast } from "react-toastify";
@@ -52,7 +52,7 @@ const FriendSuggestion = () => {
             },
           }}
         >
-          {data.map((item, index) => (
+          {data.map((item: any, index: number) => (
             <SwiperSlide key={index}>
               <div className="flex flex-col items-center gap-2 border border-gray-200 p-2 rounded-lg">
                 <img

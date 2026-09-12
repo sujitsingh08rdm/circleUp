@@ -53,7 +53,6 @@ const Chat = () => {
   const { session } = useContext(Context);
   const { id } = useParams();
   const { data } = useSWR(id ? `/chat/${id}` : null, id ? Fetcher : null);
-  console.log(chats);
 
   const messageHandler = (messageRecieved: messageRecievedInterface) => {
     setChats((prev: any) => [...prev, messageRecieved]);
@@ -150,7 +149,7 @@ const Chat = () => {
         { ...attachmentPayload, ...localMetadata },
       ]);
       socket.emit("attachment", { ...attachmentPayload, ...remoteMetadata });
-    } catch (error) {
+    } catch (error: any) {
       CatchError(error.message);
     }
   };
