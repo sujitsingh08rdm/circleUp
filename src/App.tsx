@@ -8,7 +8,7 @@ import Layout from "./component/app/Layout";
 import Dashboard from "./component/app/Dashboard";
 import Posts from "./component/app/Posts";
 import Video from "./component/app/Video";
-import Audio from "./component/app/Audio";
+import AudioChat from "./component/app/AudioChat";
 import Chat from "./component/app/Chat";
 import NotFound from "./component/NotFound";
 import Context from "./Context";
@@ -50,7 +50,7 @@ const App = () => {
                 element={<FriendList columns={2} gap={2} />}
               />
               <Route path="video-chat/:id" element={<Video />} />
-              <Route path="audio-chat/:id" element={<Audio />} />
+              <Route path="audio-chat/:id" element={<AudioChat />} />
               <Route path="chat/:id" element={<Chat />} />
             </Route>
           </Route>

@@ -15,23 +15,24 @@ const config = {
   iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
 };
 
-type CallType = "pending" | "calling" | "incoming" | "talking" | "end";
+export type CallType = "pending" | "calling" | "incoming" | "talking" | "end";
 export interface onOfferInterface {
   offer: RTCSessionDescriptionInit;
   from: any;
+  type: "video" | "audio" | "chat";
 }
 
-type AudioSrcType =
+export type AudioSrcType =
   | "/sounds/call.mp3"
   | "/sounds/ring.mp3"
   | "/sounds/reject.mp3";
 
-interface onAnswerInterface {
+export interface onAnswerInterface {
   answer: RTCSessionDescriptionInit;
   from: string;
 }
 
-interface onCandidateInterface {
+export interface onCandidateInterface {
   candidate: RTCIceCandidateInit;
   from: string;
 }
@@ -333,7 +334,7 @@ const Video = () => {
         placement: "bottomRight",
       });
 
-      socket.emit("offer", { offer, to: id, from: session });
+      socket.emit("offer", { offer, to: id, from: session, type: "video" });
     } catch (error) {
       CatchError(error);
     }
